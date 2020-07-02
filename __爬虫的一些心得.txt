@@ -1,0 +1,24 @@
+爬虫
+
+import requests
+requests库通过get方法获取页面的response，通过res.text获取整页的源代码
+res=requests.get(url,headers,params)
+
+from lxml import etree
+etree用得到的xpath对照res.text解析元素
+生成一个选择器selector=etree.HTML(res.text)
+selector可以用xpath来定位到网页元素集合的位置 # list=selector.xpath(...)
+然后再对list中元素挨个具体定位，即在 for i in list: 中具体补充元素的xpath
+
+import json
+json用来解析json字典格式的页面，这页面需要从检察元素->network里面搜索关键词才能找到（？？？）
+例如：{"subjects":[{"title":"aaa","url":""},{"title":"bbb","url":""}]}
+先用movies=json.loads(res.text)['subjects']得到小字典
+for movie in movies: movie_name=movie['title']得到具体每部电影的名称等，实际上就是字典的嵌套
+
+import re 正则表达式
+通过正则直接找标签得到元素信息 # re.findall(正则表达式,res.text,re.S)
+找到一个父标签后，还需要多次正则找子标签
+正则中用(括号)来获取需要的内容
+
+尝试用requests库爬网易云歌单，但是网易云采用<iframe>，在一个html中嵌套另一个网页，导致Xpath无法分辨一个标签在哪个网页中，因此：requests爬iframe中的元素失败。
