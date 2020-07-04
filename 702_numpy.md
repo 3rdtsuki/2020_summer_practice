@@ -56,7 +56,7 @@ np.save("a.npy",a)
 b=np.load("a.npy")
 
 np.savetxt('.csv/.txt',a,delimiter=',')  # 存进txt/csv，逗号分隔
-b=np.loadtxt('.csv/.txt',a,delimiter=',')
+b=np.loadtxt('.csv/.txt')
 ```
 
 通用函数
