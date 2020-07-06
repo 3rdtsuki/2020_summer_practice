@@ -66,6 +66,10 @@ df=pd.DataFrame(dict)
 # bob         91    92
 print(df.index[1]) #根据索引取行
 obj.reindex([]) #按照新的索引排序
+
+# 将df写入excel
+df=pd.DataFrame({'attr1':list1,'attr2':list2})
+df.to_excel(path)
 ```
 
 
