@@ -7,7 +7,7 @@ output_file=path+'jieba.txt'
 
 stopwords=['的','了','与','是','得']  # 停用词，这些助词等不需要
 def seg_list(text):
-    text_depart=jieba.cut(text.strip())
+    text_depart=jieba.cut(text.strip())  # 分词，默认为精确模式(cut_all=False)
     outstr=''
     for word in text_depart:
         if word not in stopwords:
