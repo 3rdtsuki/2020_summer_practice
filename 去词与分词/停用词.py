@@ -5,7 +5,7 @@ path='C://Users//Zhaowei//Desktop//暑假实训//去重//'
 ori_file='C://Users//Zhaowei//Desktop//暑假实训//去重//outcome_machine_compressed.txt'
 output_file=path+'jieba.txt'
 
-stopwords=['的','了','与','是','得']  # 停用词
+stopwords=['的','了','与','是','得']  # 停用词，这些助词等不需要
 def seg_list(text):
     text_depart=jieba.cut(text.strip())
     outstr=''
