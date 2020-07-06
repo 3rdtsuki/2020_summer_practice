@@ -16,3 +16,5 @@ with open(output_file,'r',encoding='utf-8')as fp:
 model=word2vec.Word2Vec(sentences,size=256,min_count=1)
 model.save('word2vec.model')
 print(model.wv.similarity('好看','漂亮'))
+
+# model=gensim.models.Word2Vec.load('word2vec.model')  # 读取模型
