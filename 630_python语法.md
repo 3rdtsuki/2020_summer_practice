@@ -1,6 +1,8 @@
 ```python
-pip install ... -i https://mirrors.aliyun.com/pypi/simple
-pip install ... -i https://pypi.tuna.tsinghua.edu.cn/simple
+镜像：
+阿里云：pip install ... -i https://mirrors.aliyun.com/pypi/simple
+清华：pip install ... -i https://pypi.tuna.tsinghua.edu.cn/simple
+中科大：pip install ... -i https://pypi.mirrors.ustc.edu.cn/simple
 
 %d,%s
 print('%d*%d=%d'%(a,b,c))
