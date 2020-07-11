@@ -13,31 +13,33 @@ from tensorflow.keras.preprocessing import sequence
 import gensim
 import numpy as np
 import xlwt
-path='C://Users//Zhaowei//Desktop//暑假实训//去重//0707//'
+from sklearn.model_selection import train_test_split
+path=r'C:\Users\Zhaowei\Desktop\暑假实训\去重\0707'
 def read_data():
     print("start read_data")
-    ng=pd.read_excel(path+'neg.xls',header=None,index=None)  # 差评
-    ps=pd.read_excel(path+'pos.xls',header=None,index=None)  # 好评
+    ng=pd.read_excel(path+'\score=0.xlsx',header=None,index=None)  # 差评
+    ps=pd.read_excel(path+'\score=1.xlsx',header=None,index=None)  # 好评
     ng['mark']=-1
     ps['mark']=1
     pn=pd.concat([ng,ps],ignore_index=True)
 
-    x=pn[0]
-    y=pn['mark']
+    x=pn[1]  # 下标取决于文本存在哪一列
+    y=pn['mark']    # 设标签
     return x,y
 # 删除停用词
 def del_stop_word(sentences):
     print("start del_stop_word")
-    with open(r'C:\Users\Zhaowei\Desktop\暑假实训\去重\0706\stop_words.txt', 'r', encoding='utf-8')  as fp:
+    with open(r'C:\Users\Zhaowei\Desktop\暑假实训\去重\0709\stoplist.txt', 'r', encoding='utf-8')  as fp:
         stop_words = fp.readlines()
         stop_words = [stop_word.replace('\n', '') for stop_word in stop_words]
-
-    for i, line in enumerate(sentences):
+    new_sentences=[]
+    for line in sentences:
+        line=str(line)
         for stop_word in stop_words:
             if stop_word in line:
                 line = line.replace(stop_word, '')
-        sentences[i] = line
-    return sentences
+        new_sentences.append(line)
+    return new_sentences
 
 def remove_words(sentences):
     print('start remove_words')
@@ -54,9 +56,7 @@ def get_words_jieba(sentences):
     model = gensim.models.Word2Vec.load("word2vec.model")
     all_aim_word = {}
     while True:
-
         words_after_jieba = [[word for word in jieba.cut(line) if word.strip()] for line in sentences]
-
         new_words = []
         for line in words_after_jieba:
             for word in line:
@@ -79,8 +79,8 @@ def get_words_jieba(sentences):
                 jieba.del_word(word)
 
 # 加入词向量
-def form_embedding(sentences):
-    model = gensim.models.Word2Vec.load("word2vec.model")
+def form_embedding(sentences,model_path="word2vec.model"):
+    model = gensim.models.Word2Vec.load(model_path)
     # index2word词列表，vectors词向量数组，
     w2v = dict(zip(model.wv.index2word, model.wv.vectors))
 
@@ -114,10 +114,8 @@ def form_embedding(sentences):
 
     return embeddings, x
 
-from sklearn.model_selection import train_test_split
 # 切分数据集，训练集与测试集8:2
 def split_train_data(x,y):
-
     x_train,x_val,y_train,y_val=train_test_split(x,y,test_size=0.2)
 
     x_train=sequence.pad_sequences(x_train,max_length)  # 超长部分取0
@@ -130,6 +128,8 @@ def split_train_data(x,y):
 
 if __name__== '__main__':
     x,y=read_data()
+    x = x.values.tolist()   # 转成list
+    y = y.values.tolist()
     x=del_stop_word(x)
     x=get_words_jieba(x)
     x=remove_words(x)
@@ -148,6 +148,7 @@ if __name__== '__main__':
     model.add(Dropout(0.5)) # 避免过拟合
     model.add(Dense(1))  # 隐藏层
     model.add(Activation('softmax'))    # 归一化
+    
     # 模型编译（损失函数，优化器）
     model.compile(loss='binary_crossentropy',optimizer='adam',metrics=['accuracy'])
     model.fit(x_train,y_train,batch_size=30)    # 训练，传入训练集
@@ -155,9 +156,6 @@ if __name__== '__main__':
     score=model.evaluate(pre,y_val,batch_size=30)  # 用预测值pre和实际值y_val进行评估
     print(pre)
     print(score)
-    with open(path+'pre.txt','a',encoding='utf-8')as fp:
-        fp.write(str(pre))
-    with open(path + 'score.txt', 'a', encoding='utf-8')as fp:
-        fp.write(str(score))
+
 
 
