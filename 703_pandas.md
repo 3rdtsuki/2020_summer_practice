@@ -36,10 +36,9 @@ print(obj1+obj2) #可以拼接两个数组
 表格DataFrame
 
 ```python
-df=pd.DataFrame(dict,columns,index) # 创建DataFrame
-df=df['attr'].values.tolist()   # DataFrame格式转成list
+df=pd.DataFrame(dict,columns,index)
 
-csv=pd.read_csv('...csv')   # 读csv
+csv=pd.read_csv('...csv')
 dict={'name':['alice','bob','cathy','david'],
      'age':[16,17,18,19],
      'score':[90,91,93,94]}# 一种字典：按列输入
@@ -67,10 +66,6 @@ df=pd.DataFrame(dict)
 # bob         91    92
 print(df.index[1]) #根据索引取行
 obj.reindex([]) #按照新的索引排序
-
-# 将df写入excel
-df=pd.DataFrame({'attr1':list1,'attr2':list2})
-df.to_excel(path)
 ```
 
 
