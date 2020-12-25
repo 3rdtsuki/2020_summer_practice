@@ -28,6 +28,7 @@ table=table[0].values.tolist()	# DataFrame转为list！！！
 读csv：
 def read_from_csv(path):
     items=[]
+    csv.field_size_limit(500 * 1024 * 1024)
     with open(path,'r',encoding="utf-8",newline="")as csvfile:
         reader=csv.reader(csvfile)
         for line in reader:
